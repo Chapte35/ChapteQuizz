@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - Quiz Capitales</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Debug Quiz</h1>
+        
+        <div class="debug-section">
+            <h2>Parties en localStorage</h2>
+            <button class="btn btn-primary" onclick="showStoredGames()">Afficher parties</button>
+            <button class="btn btn-secondary" onclick="clearStorage()">Vider localStorage</button>
+            <pre id="storageContent"></pre>
+        </div>
+        
+        <div class="debug-section">
+            <h2>Test de connexion</h2>
+            <input type="text" id="testCode" placeholder="Code de partie" />
+            <button class="btn btn-primary" onclick="testConnection()">Tester connexion</button>
+            <pre id="connectionResult"></pre>
+        </div>
+        
+        <div class="debug-section">
+            <h2>Créer une partie de test</h2>
+            <button class="btn btn-primary" onclick="createTestGame()">Créer partie TEST123</button>
+            <pre id="creationResult"></pre>
+        </div>
+        
+        <a href="index.html" class="btn btn-secondary">Retour</a>
+    </div>
+
+    <script src="js/game.js"></script>
+    <script>
+        function showStoredGames() {
+            const stored = localStorage.getItem('quiz-games-data');
+            const content = document.getElementById('storageContent');
+            
+            if (stored) {
+                try {
+                    const data = JSON.parse(stored);
+                    content.textContent = JSON.stringify(data, null, 2);
+                    console.log('Parties stockées:', data);
+                } catch (error) {
+                    content.textContent = 'Erreur de parsing: ' + error.message;
+                }
+            } else {
+                content.textContent = 'Aucune partie en localStorage';
+            }
+        }
+        
+        function clearStorage() {
+            localStorage.removeItem('quiz-games-data');
+            document.getElementById('storageContent').textContent = 'localStorage vidé';
+            console.log('localStorage vidé');
+        }
+        
+        function testConnection() {
+            const code = document.getElementById('testCode').value.trim().toUpperCase();
+            const result = document.getElementById('connectionResult');
+            
+            if (!code) {
+                result.textContent = 'Entrez un code de partie';
+                return;
+            }
+            
+            const game = gameComm.getGame(code);
+            
+            if (game) {
+                result.textContent = `Partie trouvée: ${code}\nÉtat: ${game.state}\nJoueurs: ${game.players.size}\nHôte: ${game.hostId}`;
+            } else {
+                result.textContent = `Aucune partie trouvée avec le code: ${code}`;
+            }
+        }
+        
+        async function createTestGame() {
+            const result = document.getElementById('creationResult');
+            
+            try {
+                const testGame = gameComm.createGame('TEST123', 'debug-host');
+                
+                // Charge les questions
+                const loaded = await testGame.loadQuestions();
+                
+                if (loaded) {
+                    result.textContent = `Partie TEST123 créée avec succès!\nQuestions: ${testGame.questions.length}\nÉtat: ${testGame.state}`;
+                    gameComm.updateGame('TEST123');
+                } else {
+                    result.textContent = 'Partie créée mais erreur chargement questions';
+                }
+            } catch (error) {
+                result.textContent = 'Erreur: ' + error.message;
+            }
+        }
+        
+        // Affiche automatiquement les parties au chargement
+        document.addEventListener('DOMContentLoaded', showStoredGames);
+    </script>
+</body>
+</html>

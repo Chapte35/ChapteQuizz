@@ -30,10 +30,11 @@ async function initializeHost() {
         // Configure les événements
         setupHostEvents();
         
-        // Lance la simulation de connexions (pour les tests)
-        startPlayerConnectionSimulation();
+        // Force la sauvegarde
+        gameComm.updateGame(gameCode);
         
-        Utils.showMessage('Partie créée avec succès !', 'success');
+        Utils.showMessage(`Partie créée avec le code: ${gameCode}`, 'success');
+        console.log('Partie créée et prête, code:', gameCode);
     } catch (error) {
         console.error('Erreur lors de l\'initialisation:', error);
         Utils.showMessage('Erreur lors de la création de la partie', 'error');
@@ -67,11 +68,13 @@ function setupHostEvents() {
     // Simulation de connexion de joueurs
     gameComm.on('playerJoined', (data) => {
         updatePlayersList();
+        gameComm.updateGame(currentGame.gameCode); // Force la synchronisation
         Utils.showMessage(`${data.playerName} a rejoint la partie`, 'success');
     });
     
     gameComm.on('playerLeft', (data) => {
         updatePlayersList();
+        gameComm.updateGame(currentGame.gameCode); // Force la synchronisation
         Utils.showMessage(`${data.playerName} a quitté la partie`, 'warning');
     });
 }

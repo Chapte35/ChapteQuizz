@@ -211,11 +211,88 @@ class Game {
     }
 }
 
-// Système de communication simplifié (sans WebSocket pour le moment)
+// Système de communication simplifié avec stockage local partagé
 class SimpleGameCommunication {
     constructor() {
         this.games = new Map();
         this.eventHandlers = new Map();
+        this.storageKey = 'quiz-games-data';
+        
+        // Charge les parties existantes depuis localStorage
+        this.loadGamesFromStorage();
+        
+        // Écoute les changements dans localStorage (pour synchroniser entre onglets)
+        window.addEventListener('storage', (e) => {
+            if (e.key === this.storageKey) {
+                this.loadGamesFromStorage();
+            }
+        });
+        
+        // Sauvegarde périodiquement
+        setInterval(() => {
+            this.saveGamesToStorage();
+        }, 2000);
+    }
+
+    // Charge les parties depuis localStorage
+    loadGamesFromStorage() {
+        try {
+            const stored = localStorage.getItem(this.storageKey);
+            if (stored) {
+                const data = JSON.parse(stored);
+                console.log('Chargement des parties depuis localStorage:', Object.keys(data));
+                
+                // Reconstitue les parties
+                for (const [gameCode, gameData] of Object.entries(data)) {
+                    if (!this.games.has(gameCode)) {
+                        const game = new Game();
+                        Object.assign(game, gameData);
+                        
+                        // Reconstitue la Map des joueurs
+                        game.players = new Map();
+                        if (gameData.playersArray) {
+                            gameData.playersArray.forEach(playerData => {
+                                game.players.set(playerData.id, playerData);
+                            });
+                        }
+                        
+                        this.games.set(gameCode, game);
+                        console.log('Partie reconstituée:', gameCode, 'avec', game.players.size, 'joueurs');
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Erreur chargement localStorage:', error);
+        }
+    }
+
+    // Sauvegarde les parties dans localStorage
+    saveGamesToStorage() {
+        try {
+            const data = {};
+            
+            for (const [gameCode, game] of this.games.entries()) {
+                // Convertit la Map des joueurs en Array pour la sérialisation
+                const playersArray = Array.from(game.players.values());
+                
+                data[gameCode] = {
+                    gameCode: game.gameCode,
+                    hostId: game.hostId,
+                    state: game.state,
+                    settings: game.settings,
+                    questions: game.questions,
+                    questionIndex: game.questionIndex,
+                    currentQuestion: game.currentQuestion,
+                    playersArray: playersArray,
+                    timeLeft: game.timeLeft
+                };
+            }
+            
+            localStorage.setItem(this.storageKey, JSON.stringify(data));
+            console.log('Parties sauvegardées:', Object.keys(data));
+        } catch (error) {
+            console.error('Erreur sauvegarde localStorage:', error);
+        }
     }
 
     // Crée une nouvelle partie
@@ -224,17 +301,30 @@ class SimpleGameCommunication {
         game.gameCode = gameCode;
         game.hostId = hostId;
         this.games.set(gameCode, game);
+        
+        // Sauvegarde immédiatement
+        this.saveGamesToStorage();
+        
+        console.log('Partie créée et sauvegardée:', gameCode);
         return game;
     }
 
     // Rejoint une partie
     joinGame(gameCode, playerId, playerName) {
         console.log('Tentative de rejoindre la partie:', gameCode);
+        
+        // Force le rechargement depuis localStorage
+        this.loadGamesFromStorage();
+        
         const game = this.games.get(gameCode);
         
         if (game) {
             if (game.state === GameState.WAITING || game.state === GameState.PLAYING) {
                 const player = game.addPlayer(playerId, playerName);
+                
+                // Sauvegarde immédiatement
+                this.saveGamesToStorage();
+                
                 console.log('Joueur ajouté:', playerName, 'Total joueurs:', game.players.size);
                 return player;
             } else {
@@ -243,12 +333,15 @@ class SimpleGameCommunication {
             }
         } else {
             console.log('Partie non trouvée pour le code:', gameCode);
+            console.log('Parties disponibles:', Array.from(this.games.keys()));
             return null;
         }
     }
 
     // Obtient une partie
     getGame(gameCode) {
+        // Force le rechargement depuis localStorage
+        this.loadGamesFromStorage();
         return this.games.get(gameCode);
     }
 
@@ -258,7 +351,25 @@ class SimpleGameCommunication {
         if (game) {
             game.stopTimer();
         }
-        return this.games.delete(gameCode);
+        
+        const deleted = this.games.delete(gameCode);
+        
+        // Sauvegarde immédiatement
+        this.saveGamesToStorage();
+        
+        return deleted;
+    }
+
+    // Met à jour une partie
+    updateGame(gameCode) {
+        // Sauvegarde immédiatement
+        this.saveGamesToStorage();
+        
+        // Déclenche l'événement storage pour synchroniser les autres onglets
+        window.dispatchEvent(new StorageEvent('storage', {
+            key: this.storageKey,
+            newValue: localStorage.getItem(this.storageKey)
+        }));
     }
 
     // Système d'événements
@@ -284,6 +395,9 @@ class SimpleGameCommunication {
         } else {
             console.log('Aucun handler pour l\'événement:', event);
         }
+        
+        // Sauvegarde l'état après chaque événement
+        this.saveGamesToStorage();
     }
 }
 
