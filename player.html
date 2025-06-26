@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Capitales - Joueur</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container player-container">
+        <!-- Écran de connexion -->
+        <div class="connection-screen" id="connectionScreen">
+            <h1>📱 Connexion en cours...</h1>
+            <div class="connection-info">
+                <p>Nom : <strong id="playerNameDisplay">-</strong></p>
+                <p>Code : <strong id="gameCodeDisplay">-</strong></p>
+            </div>
+            <div class="loading">⏳ Connexion à la partie...</div>
+        </div>
+        
+        <!-- Écran d'attente -->
+        <div class="waiting-screen" id="waitingScreen" style="display: none;">
+            <h1>🎮 En attente</h1>
+            <div class="player-info">
+                <div class="player-avatar">👤</div>
+                <h2 id="playerName">Joueur</h2>
+                <p>Vous êtes connecté !</p>
+            </div>
+            
+            <div class="game-info">
+                <p>Code de la partie : <strong id="gameCodeWaiting">-</strong></p>
+                <p>Joueurs connectés : <span id="playersCount">1</span></p>
+            </div>
+            
+            <div class="status">
+                <p>⏳ En attente du début de la partie...</p>
+            </div>
+        </div>
+        
+        <!-- Écran de jeu -->
+        <div class="game-screen" id="gameScreen" style="display: none;">
+            <div class="game-header">
+                <div class="question-info">
+                    <span class="question-number">Q<span id="questionNumber">1</span></span>
+                    <span class="player-score">Score: <span id="playerScore">0</span></span>
+                </div>
+                <div class="timer-mobile">
+                    <div class="timer-bar">
+                        <div class="timer-fill" id="timerFill"></div>
+                    </div>
+                    <span id="timeRemaining">15s</span>
+                </div>
+            </div>
+            
+            <div class="question-text">
+                <h2 id="questionDisplay">Question en cours de chargement...</h2>
+            </div>
+            
+            <div class="answers-mobile" id="answersMobile">
+                <button class="answer-btn" data-answer="A" onclick="selectAnswer('A')">
+                    <span class="answer-letter">A</span>
+                    <span class="answer-text">Réponse A</span>
+                </button>
+                <button class="answer-btn" data-answer="B" onclick="selectAnswer('B')">
+                    <span class="answer-letter">B</span>
+                    <span class="answer-text">Réponse B</span>
+                </button>
+                <button class="answer-btn" data-answer="C" onclick="selectAnswer('C')">
+                    <span class="answer-letter">C</span>
+                    <span class="answer-text">Réponse C</span>
+                </button>
+                <button class="answer-btn" data-answer="D" onclick="selectAnswer('D')">
+                    <span class="answer-letter">D</span>
+                    <span class="answer-text">Réponse D</span>
+                </button>
+            </div>
+            
+            <div class="answer-feedback" id="answerFeedback" style="display: none;">
+                <div class="feedback-message" id="feedbackMessage"></div>
+            </div>
+        </div>
+        
+        <!-- Écran des résultats -->
+        <div class="results-screen" id="resultsScreen" style="display: none;">
+            <h1>🏆 Partie terminée</h1>
+            
+            <div class="personal-result">
+                <h2>Votre performance</h2>
+                <div class="result-card">
+                    <div class="result-score">
+                        <span class="score-value" id="finalScore">0</span>
+                        <span class="score-label">points</span>
+                    </div>
+                    <div class="result-stats">
+                        <p>Position : <strong id="playerRank">-</strong></p>
+                        <p>Bonnes réponses : <strong id="correctAnswers">0</strong></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="ranking" id="ranking">
+                <h3>Classement final</h3>
+                <div id="rankingList"></div>
+            </div>
+            
+            <button class="btn btn-primary" onclick="goHome()">Retour à l'accueil</button>
+        </div>
+        
+        <!-- Écran d'erreur -->
+        <div class="error-screen" id="errorScreen" style="display: none;">
+            <h1>❌ Erreur de connexion</h1>
+            <p id="errorMessage">Impossible de se connecter à la partie.</p>
+            <button class="btn btn-primary" onclick="goHome()">Retour à l'accueil</button>
+        </div>
+    </div>
+
+    <script src="js/game.js"></script>
+    <script src="js/player.js"></script>
+</body>
+</html>

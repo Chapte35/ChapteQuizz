@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Capitales - Hôte</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container host-container">
+        <!-- Écran de création de partie -->
+        <div class="game-setup" id="gameSetup">
+            <h1>🎮 Créer une partie</h1>
+            <div class="game-code-display">
+                <h2>Code de la partie :</h2>
+                <div class="game-code" id="gameCode">-</div>
+                <p>Les joueurs peuvent rejoindre avec ce code</p>
+            </div>
+            
+            <div class="settings">
+                <h3>Paramètres</h3>
+                <div class="setting-item">
+                    <label for="questionCount">Nombre de questions :</label>
+                    <select id="questionCount">
+                        <option value="10">10 questions</option>
+                        <option value="15" selected>15 questions</option>
+                        <option value="20">20 questions</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label for="timePerQuestion">Temps par question :</label>
+                    <select id="timePerQuestion">
+                        <option value="10">10 secondes</option>
+                        <option value="15" selected>15 secondes</option>
+                        <option value="20">20 secondes</option>
+                        <option value="30">30 secondes</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="players-list">
+                <h3>Joueurs connectés (<span id="playerCount">0</span>)</h3>
+                <ul id="playersList"></ul>
+            </div>
+            
+            <button class="btn btn-primary" id="startGameBtn" onclick="startGame()" disabled>
+                Commencer la partie
+            </button>
+        </div>
+        
+        <!-- Écran de jeu -->
+        <div class="game-screen" id="gameScreen" style="display: none;">
+            <div class="game-header">
+                <div class="question-counter">
+                    Question <span id="currentQuestion">1</span> / <span id="totalQuestions">15</span>
+                </div>
+                <div class="timer">
+                    <div class="timer-circle">
+                        <span id="timeLeft">15</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question-display">
+                <h2 id="questionText">Quelle est la capitale de la France ?</h2>
+                <div class="answers-grid" id="answersGrid">
+                    <div class="answer-option" data-answer="A">A. Paris</div>
+                    <div class="answer-option" data-answer="B">B. Lyon</div>
+                    <div class="answer-option" data-answer="C">C. Marseille</div>
+                    <div class="answer-option" data-answer="D">D. Toulouse</div>
+                </div>
+            </div>
+            
+            <div class="players-answers">
+                <h3>Réponses des joueurs</h3>
+                <div id="playersAnswers"></div>
+            </div>
+            
+            <button class="btn btn-primary" id="nextQuestionBtn" onclick="nextQuestion()" style="display: none;">
+                Question suivante
+            </button>
+        </div>
+        
+        <!-- Écran des résultats -->
+        <div class="results-screen" id="resultsScreen" style="display: none;">
+            <h1>🏆 Résultats finaux</h1>
+            <div class="podium" id="podium"></div>
+            <div class="final-scores" id="finalScores"></div>
+            <button class="btn btn-primary" onclick="newGame()">Nouvelle partie</button>
+            <button class="btn btn-secondary" onclick="goHome()">Accueil</button>
+        </div>
+    </div>
+
+    <script src="js/game.js"></script>
+    <script src="js/host.js"></script>
+</body>
+</html>

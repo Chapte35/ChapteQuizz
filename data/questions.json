@@ -1,0 +1,304 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "question": "Quelle est la capitale de la France ?",
+      "answers": {
+        "A": "Paris",
+        "B": "Lyon",
+        "C": "Marseille",
+        "D": "Toulouse"
+      },
+      "correct": "A",
+      "difficulty": "facile"
+    },
+    {
+      "id": 2,
+      "question": "Quelle est la capitale de l'Italie ?",
+      "answers": {
+        "A": "Milan",
+        "B": "Rome",
+        "C": "Naples",
+        "D": "Florence"
+      },
+      "correct": "B",
+      "difficulty": "facile"
+    },
+    {
+      "id": 3,
+      "question": "Quelle est la capitale du Japon ?",
+      "answers": {
+        "A": "Osaka",
+        "B": "Kyoto",
+        "C": "Tokyo",
+        "D": "Hiroshima"
+      },
+      "correct": "C",
+      "difficulty": "facile"
+    },
+    {
+      "id": 4,
+      "question": "Quelle est la capitale de l'Australie ?",
+      "answers": {
+        "A": "Sydney",
+        "B": "Melbourne",
+        "C": "Perth",
+        "D": "Canberra"
+      },
+      "correct": "D",
+      "difficulty": "moyen"
+    },
+    {
+      "id": 5,
+      "question": "Quelle est la capitale du Brésil ?",
+      "answers": {
+        "A": "Rio de Janeiro",
+        "B": "São Paulo",
+        "C": "Brasília",
+        "D": "Salvador"
+      },
+      "correct": "C",
+      "difficulty": "moyen"
+    },
+    {
+      "id": 6,
+      "question": "Quelle est la capitale de la Nouvelle-Zélande ?",
+      "answers": {
+        "A": "Auckland",
+        "B": "Wellington",
+        "C": "Christchurch",
+        "D": "Hamilton"
+      },
+      "correct": "B",
+      "difficulty": "moyen"
+    },
+    {
+      "id": 7,
+      "question": "Quelle est la capitale du Canada ?",
+      "answers": {
+        "A": "Toronto",
+        "B": "Vancouver",
+        "C": "Montréal",
+        "D": "Ottawa"
+      },
+      "correct": "D",
+      "difficulty": "facile"
+    },
+    {
+      "id": 8,
+      "question": "Quelle est la capitale de l'Afrique du Sud ?",
+      "answers": {
+        "A": "Johannesburg",
+        "B": "Le Cap",
+        "C": "Pretoria",
+        "D": "Durban"
+      },
+      "correct": "C",
+      "difficulty": "difficile"
+    },
+    {
+      "id": 9,
+      "question": "Quelle est la capitale de la Suisse ?",
+      "answers": {
+        "A": "Zurich",
+        "B": "Genève",
+        "C": "Bâle",
+        "D": "Berne"
+      },
+      "correct": "D",
+      "difficulty": "moyen"
+    },
+    {
+      "id": 10,
+      "question": "Quelle est la capitale de la Norvège ?",
+      "answers": {
+        "A": "Bergen",
+        "B": "Oslo",
+        "C": "Trondheim",
+        "D": "Stavanger"
+      },
+      "correct": "B",
+      "difficulty": "moyen"
+    },
+    {
+      "id": 11,
+      "question": "Quelle est la capitale de la Thaïlande ?",
+      "answers": {
+        "A": "Chiang Mai",
+        "B": "Phuket",
+        "C": "Bangkok",
+        "D": "Pattaya"
+      },
+      "correct": "C",
+      "difficulty": "facile"
+    },
+    {
+      "id": 12,
+      "question": "Quelle est la capitale de l'Argentine ?",
+      "answers": {
+        "A": "Buenos Aires",
+        "B": "Córdoba",
+        "C": "Rosario",
+        "D": "Mendoza"
+      },
+      "correct": "A",
+      "difficulty": "facile"
+    },
+    {
+      "id": 13,
+      "question": "Quelle est la capitale de la Finlande ?",
+      "answers": {
+        "A": "Tampere",
+        "B": "Helsinki",
+        "C": "Turku",
+        "D": "Oulu"
+      },
+      "correct": "B",
+      "difficulty": "moyen"
+    },
+    {
+      "id": 14,
+      "question": "Quelle est la capitale du Pérou ?",
+      "answers": {
+        "A": "Cusco",
+        "B": "Arequipa",
+        "C": "Lima",
+        "D": "Trujillo"
+      },
+      "correct": "C",
+      "difficulty": "moyen"
+    },
+    {
+      "id": 15,
+      "question": "Quelle est la capitale de la Mongolie ?",
+      "answers": {
+        "A": "Darkhan",
+        "B": "Erdenet",
+        "C": "Choibalsan",
+        "D": "Oulan-Bator"
+      },
+      "correct": "D",
+      "difficulty": "difficile"
+    },
+    {
+      "id": 16,
+      "question": "Quelle est la capitale du Kazakhstan ?",
+      "answers": {
+        "A": "Almaty",
+        "B": "Astana",
+        "C": "Chymkent",
+        "D": "Aktobe"
+      },
+      "correct": "B",
+      "difficulty": "difficile"
+    },
+    {
+      "id": 17,
+      "question": "Quelle est la capitale de la Croatie ?",
+      "answers": {
+        "A": "Split",
+        "B": "Rijeka",
+        "C": "Zagreb",
+        "D": "Dubrovnik"
+      },
+      "correct": "C",
+      "difficulty": "moyen"
+    },
+    {
+      "id": 18,
+      "question": "Quelle est la capitale de l'Éthiopie ?",
+      "answers": {
+        "A": "Addis-Abeba",
+        "B": "Dire Dawa",
+        "C": "Mek'ele",
+        "D": "Gondar"
+      },
+      "correct": "A",
+      "difficulty": "difficile"
+    },
+    {
+      "id": 19,
+      "question": "Quelle est la capitale du Vietnam ?",
+      "answers": {
+        "A": "Hô Chi Minh-Ville",
+        "B": "Hanoï",
+        "C": "Da Nang",
+        "D": "Hué"
+      },
+      "correct": "B",
+      "difficulty": "moyen"
+    },
+    {
+      "id": 20,
+      "question": "Quelle est la capitale du Chili ?",
+      "answers": {
+        "A": "Valparaíso",
+        "B": "Concepción",
+        "C": "Santiago",
+        "D": "La Serena"
+      },
+      "correct": "C",
+      "difficulty": "facile"
+    },
+    {
+      "id": 21,
+      "question": "Quelle est la capitale de la Slovénie ?",
+      "answers": {
+        "A": "Maribor",
+        "B": "Ljubljana",
+        "C": "Celje",
+        "D": "Kranj"
+      },
+      "correct": "B",
+      "difficulty": "difficile"
+    },
+    {
+      "id": 22,
+      "question": "Quelle est la capitale de l'Uruguay ?",
+      "answers": {
+        "A": "Salto",
+        "B": "Paysandú",
+        "C": "Montevideo",
+        "D": "Rivera"
+      },
+      "correct": "C",
+      "difficulty": "moyen"
+    },
+    {
+      "id": 23,
+      "question": "Quelle est la capitale de la Lettonie ?",
+      "answers": {
+        "A": "Daugavpils",
+        "B": "Liepāja",
+        "C": "Riga",
+        "D": "Jelgava"
+      },
+      "correct": "C",
+      "difficulty": "difficile"
+    },
+    {
+      "id": 24,
+      "question": "Quelle est la capitale de la Bolivie ?",
+      "answers": {
+        "A": "La Paz",
+        "B": "Santa Cruz",
+        "C": "Sucre",
+        "D": "Cochabamba"
+      },
+      "correct": "C",
+      "difficulty": "difficile"
+    },
+    {
+      "id": 25,
+      "question": "Quelle est la capitale du Népal ?",
+      "answers": {
+        "A": "Pokhara",
+        "B": "Katmandou",
+        "C": "Lalitpur",
+        "D": "Biratnagar"
+      },
+      "correct": "B",
+      "difficulty": "moyen"
+    }
+  ]
+}

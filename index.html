@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Capitales</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="welcome-screen">
+            <h1>🌍 Quiz des Capitales</h1>
+            <p>Testez vos connaissances géographiques entre amis !</p>
+            
+            <div class="role-selection">
+                <div class="role-card host-card" onclick="selectRole('host')">
+                    <div class="role-icon">🖥️</div>
+                    <h3>Hôte de la partie</h3>
+                    <p>Créez une partie depuis votre PC</p>
+                    <button class="btn btn-primary">Créer une partie</button>
+                </div>
+                
+                <div class="role-card player-card" onclick="selectRole('player')">
+                    <div class="role-icon">📱</div>
+                    <h3>Rejoindre en tant que joueur</h3>
+                    <p>Utilisez votre téléphone pour participer</p>
+                    <button class="btn btn-secondary">Rejoindre</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="join-game-form" id="joinForm" style="display: none;">
+            <h2>Rejoindre une partie</h2>
+            <div class="form-group">
+                <label for="gameCode">Code de la partie :</label>
+                <input type="text" id="gameCode" placeholder="Entrez le code" maxlength="6">
+            </div>
+            <div class="form-group">
+                <label for="playerName">Votre nom :</label>
+                <input type="text" id="playerName" placeholder="Entrez votre nom" maxlength="20">
+            </div>
+            <button class="btn btn-primary" onclick="joinGame()">Rejoindre</button>
+            <button class="btn btn-secondary" onclick="goBack()">Retour</button>
+        </div>
+    </div>
+
+    <script>
+        function selectRole(role) {
+            if (role === 'host') {
+                window.location.href = 'host.html';
+            } else {
+                document.querySelector('.welcome-screen').style.display = 'none';
+                document.getElementById('joinForm').style.display = 'block';
+            }
+        }
+        
+        function joinGame() {
+            const code = document.getElementById('gameCode').value.trim().toUpperCase();
+            const name = document.getElementById('playerName').value.trim();
+            
+            if (!code || !name) {
+                alert('Veuillez remplir tous les champs');
+                return;
+            }
+            
+            localStorage.setItem('playerName', name);
+            localStorage.setItem('gameCode', code);
+            window.location.href = 'player.html';
+        }
+        
+        function goBack() {
+            document.querySelector('.welcome-screen').style.display = 'block';
+            document.getElementById('joinForm').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

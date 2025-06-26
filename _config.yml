@@ -1,0 +1,40 @@
+# Configuration GitHub Pages pour Quiz Capitales
+title: Quiz des Capitales
+description: Jeu de quiz multi-joueurs sur les capitales du monde
+url: "" # L'URL sera automatiquement définie par GitHub Pages
+baseurl: "" # Sous-répertoire si applicable
+
+# Thème GitHub Pages (optionnel)
+# theme: minima
+
+# Plugins Jekyll (optionnel)
+plugins:
+  - jekyll-sitemap
+  - jekyll-feed
+
+# Exclusions pour éviter de publier des fichiers inutiles
+exclude:
+  - README.md
+  - LICENSE
+  - .gitignore
+  - .git/
+  - node_modules/
+  - package.json
+  - package-lock.json
+
+# Configuration pour les pages statiques
+markdown: kramdown
+highlighter: rouge
+
+# Métadonnées du site
+author: Votre Nom
+email: votre-email@example.com
+
+# Configuration pour les réseaux sociaux (optionnel)
+social:
+  twitter: votre_username
+  github: votre_username
+
+# Configuration SEO
+lang: fr-FR
+timezone: Europe/Paris
