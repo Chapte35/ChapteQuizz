@@ -165,6 +165,7 @@ class Game {
             clearInterval(this.timer);
         }
         
+        // Sauvegarde la référence dans l'instance
         this.timer = setInterval(() => {
             this.timeLeft--;
             
@@ -180,6 +181,11 @@ class Game {
                 }
             }
         }, 1000);
+        
+        // Appelle onTick immédiatement pour l'affichage initial
+        if (onTick) {
+            onTick(this.timeLeft);
+        }
     }
 
     // Arrête le timer

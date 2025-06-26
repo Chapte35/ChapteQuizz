@@ -1,36 +1,36 @@
-# Quiz des Capitales ğŸŒ
+# Quiz des Capitales ??
 
-Un jeu de quiz multi-joueurs sur les capitales du monde, oÃ¹ un PC fait office d'hÃ´te et les joueurs participent depuis leur tÃ©lÃ©phone.
+Un jeu de quiz multi-joueurs sur les capitales du monde, où un PC fait office d'hôte et les joueurs participent depuis leur téléphone.
 
-## ğŸ® FonctionnalitÃ©s
+## ?? Fonctionnalités
 
-- **Mode hÃ´te (PC)** : CrÃ©er et gÃ©rer une partie
+- **Mode hôte (PC)** : Créer et gérer une partie
 - **Mode joueur (Mobile)** : Rejoindre une partie avec un code
-- **Questions alÃ©atoires** sur les capitales du monde
-- **SystÃ¨me de points** avec bonus de rapiditÃ©
-- **Classement en temps rÃ©el**
-- **Interface responsive** adaptÃ©e mobile et desktop
+- **Questions aléatoires** sur les capitales du monde
+- **Système de points** avec bonus de rapidité
+- **Classement en temps réel**
+- **Interface responsive** adaptée mobile et desktop
 
-## ğŸš€ Installation et dÃ©ploiement
+## ?? Installation et déploiement
 
-### DÃ©ploiement sur GitHub Pages
+### Déploiement sur GitHub Pages
 
-1. **Forkez ce repository** ou crÃ©ez un nouveau repository
+1. **Forkez ce repository** ou créez un nouveau repository
 2. **Uploadez tous les fichiers** dans votre repository
 3. **Activez GitHub Pages** :
    - Allez dans Settings > Pages
-   - SÃ©lectionnez "Deploy from a branch"
+   - Sélectionnez "Deploy from a branch"
    - Choisissez "main" comme branche source
    - Cliquez sur Save
 
-4. **CrÃ©ez le fichier `_config.yml`** (si pas dÃ©jÃ  prÃ©sent) :
+4. **Créez le fichier `_config.yml`** (si pas déjà présent) :
 ```yaml
 # Configuration GitHub Pages
 title: Quiz des Capitales
 description: Jeu de quiz multi-joueurs sur les capitales
 ```
 
-5. **Votre site sera accessible** Ã  : `https://votre-username.github.io/nom-du-repository`
+5. **Votre site sera accessible** à : `https://chapte35.github.io/ChapteQuizz/`
 
 ### Installation locale
 
@@ -47,49 +47,49 @@ python -m http.server 8000
 # Ou avec Node.js
 npx serve .
 
-# AccÃ©dez Ã  http://localhost:8000
+# Accédez à http://localhost:8000
 ```
 
-## ğŸ“ Structure du projet
+## ?? Structure du projet
 
 ```
 quiz-capitales/
-â”œâ”€â”€ index.html              # Page d'accueil
-â”œâ”€â”€ host.html              # Interface hÃ´te (PC)
-â”œâ”€â”€ player.html            # Interface joueur (mobile)
-â”œâ”€â”€ css/
-â”‚   â””â”€â”€ style.css          # Styles CSS
-â”œâ”€â”€ js/
-â”‚   â”œâ”€â”€ game.js            # Logique de jeu partagÃ©e
-â”‚   â”œâ”€â”€ host.js            # Logique cÃ´tÃ© hÃ´te
-â”‚   â””â”€â”€ player.js          # Logique cÃ´tÃ© joueur
-â”œâ”€â”€ data/
-â”‚   â””â”€â”€ questions.json     # Base de donnÃ©es des questions
-â”œâ”€â”€ README.md              # Cette documentation
-â””â”€â”€ _config.yml            # Configuration GitHub Pages
++-- index.html              # Page d'accueil
++-- host.html              # Interface hôte (PC)
++-- player.html            # Interface joueur (mobile)
++-- css/
+¦   +-- style.css          # Styles CSS
++-- js/
+¦   +-- game.js            # Logique de jeu partagée
+¦   +-- host.js            # Logique côté hôte
+¦   +-- player.js          # Logique côté joueur
++-- data/
+¦   +-- questions.json     # Base de données des questions
++-- README.md              # Cette documentation
++-- _config.yml            # Configuration GitHub Pages
 ```
 
-## ğŸ¯ Comment jouer
+## ?? Comment jouer
 
-### Pour l'hÃ´te (PC)
-1. Ouvrez le site et cliquez sur "HÃ´te de la partie"
-2. Configurez les paramÃ¨tres (nombre de questions, temps par question)
-3. Partagez le code de la partie affichÃ© aux joueurs
+### Pour l'hôte (PC)
+1. Ouvrez le site et cliquez sur "Hôte de la partie"
+2. Configurez les paramètres (nombre de questions, temps par question)
+3. Partagez le code de la partie affiché aux joueurs
 4. Attendez que les joueurs se connectent
 5. Cliquez sur "Commencer la partie"
 
 ### Pour les joueurs (Mobile)
-1. Ouvrez le site sur votre tÃ©lÃ©phone
+1. Ouvrez le site sur votre téléphone
 2. Cliquez sur "Rejoindre en tant que joueur"
 3. Entrez le code de la partie et votre nom
-4. Attendez le dÃ©but de la partie
-5. RÃ©pondez aux questions en touchant les rÃ©ponses
+4. Attendez le début de la partie
+5. Répondez aux questions en touchant les réponses
 
-## âš™ï¸ Configuration
+## ?? Configuration
 
 ### Modifier les questions
 
-Ã‰ditez le fichier `data/questions.json` :
+Éditez le fichier `data/questions.json` :
 
 ```json
 {
@@ -110,49 +110,49 @@ quiz-capitales/
 }
 ```
 
-### ParamÃ¨tres de jeu
+### Paramètres de jeu
 
 Dans `js/game.js`, modifiez `GameConfig` :
 
 ```javascript
 const GameConfig = {
-    POINTS_CORRECT: 100,        // Points pour une bonne rÃ©ponse
-    POINTS_SPEED_BONUS: 50,     // Bonus de rapiditÃ©
-    DEFAULT_QUESTION_TIME: 15,  // Temps par dÃ©faut (secondes)
+    POINTS_CORRECT: 100,        // Points pour une bonne réponse
+    POINTS_SPEED_BONUS: 50,     // Bonus de rapidité
+    DEFAULT_QUESTION_TIME: 15,  // Temps par défaut (secondes)
     CONNECTION_TIMEOUT: 30000   // Timeout de connexion (ms)
 };
 ```
 
-## ğŸ”§ Personnalisation
+## ?? Personnalisation
 
-### Ajouter de nouvelles fonctionnalitÃ©s
+### Ajouter de nouvelles fonctionnalités
 
-Le code est structurÃ© de maniÃ¨re modulaire pour faciliter les ajouts :
+Le code est structuré de manière modulaire pour faciliter les ajouts :
 
 1. **Nouvelles questions** : Ajoutez dans `questions.json`
 2. **Nouveaux types de jeu** : Modifiez la classe `Game` dans `game.js`
-3. **Nouvelle interface** : Ajoutez des Ã©crans dans les fichiers HTML
+3. **Nouvelle interface** : Ajoutez des écrans dans les fichiers HTML
 4. **Nouveaux styles** : Modifiez `style.css`
 
 ### Exemples d'extensions possibles
 
-- **CatÃ©gories de questions** (gÃ©ographie, histoire, sport...)
-- **Mode tournoi** avec Ã©limination
-- **Power-ups** et bonus spÃ©ciaux
-- **Chat en temps rÃ©el**
-- **Statistiques dÃ©taillÃ©es**
+- **Catégories de questions** (géographie, histoire, sport...)
+- **Mode tournoi** avec élimination
+- **Power-ups** et bonus spéciaux
+- **Chat en temps réel**
+- **Statistiques détaillées**
 - **Sauvegarde des scores**
 
-## ğŸŒ WebSocket (pour la version avancÃ©e)
+## ?? WebSocket (pour la version avancée)
 
-Actuellement, le jeu fonctionne en mode simulation. Pour une vraie communication temps rÃ©el :
+Actuellement, le jeu fonctionne en mode simulation. Pour une vraie communication temps réel :
 
-1. **DÃ©ployez un serveur WebSocket** (Node.js, Python, etc.)
+1. **Déployez un serveur WebSocket** (Node.js, Python, etc.)
 2. **Modifiez `GameConfig.WEBSOCKET_URL`** dans `game.js`
-3. **ImplÃ©mentez la logique serveur** pour :
+3. **Implémentez la logique serveur** pour :
    - Gestion des salles de jeu
    - Synchronisation des questions
-   - Gestion des dÃ©connexions
+   - Gestion des déconnexions
 
 ### Exemple de serveur Node.js/Socket.io
 
@@ -162,7 +162,7 @@ const games = new Map();
 
 io.on('connection', (socket) => {
   socket.on('createGame', (gameCode) => {
-    // Logique crÃ©ation de partie
+    // Logique création de partie
   });
   
   socket.on('joinGame', (gameCode, playerName) => {
@@ -171,7 +171,7 @@ io.on('connection', (socket) => {
 });
 ```
 
-## ğŸ¨ ThÃ¨mes et styles
+## ?? Thèmes et styles
 
 Le CSS utilise des variables pour faciliter la personnalisation :
 
@@ -180,45 +180,45 @@ Le CSS utilise des variables pour faciliter la personnalisation :
     --primary-color: #4CAF50;
     --secondary-color: #2196F3;
     --accent-color: #FF9800;
-    /* Modifiez ces valeurs pour changer le thÃ¨me */
+    /* Modifiez ces valeurs pour changer le thème */
 }
 ```
 
-## ğŸ“± Responsive Design
+## ?? Responsive Design
 
 L'interface s'adapte automatiquement :
-- **Desktop** : Interface hÃ´te complÃ¨te
-- **Mobile** : Interface joueur optimisÃ©e
+- **Desktop** : Interface hôte complète
+- **Mobile** : Interface joueur optimisée
 - **Tablette** : Interface hybride
 
-## ğŸ› DÃ©pannage
+## ?? Dépannage
 
-### ProblÃ¨mes courants
+### Problèmes courants
 
 1. **Les questions ne se chargent pas**
-   - VÃ©rifiez que `questions.json` est valide
+   - Vérifiez que `questions.json` est valide
    - Assurez-vous que le serveur web fonctionne
 
 2. **Les joueurs ne peuvent pas se connecter**
-   - VÃ©rifiez que tous les appareils sont sur le mÃªme rÃ©seau
-   - Utilisez l'IP locale de l'hÃ´te
+   - Vérifiez que tous les appareils sont sur le même réseau
+   - Utilisez l'IP locale de l'hôte
 
 3. **L'interface ne s'affiche pas correctement**
-   - VÃ©rifiez la console du navigateur
-   - Assurez-vous que tous les fichiers CSS/JS sont chargÃ©s
+   - Vérifiez la console du navigateur
+   - Assurez-vous que tous les fichiers CSS/JS sont chargés
 
-## ğŸ¤ Contribution
+## ?? Contribution
 
 Pour contribuer au projet :
 
 1. Forkez le repository
-2. CrÃ©ez une branche feature (`git checkout -b feature/nouvelle-fonctionnalite`)
-3. Committez vos changes (`git commit -am 'Ajoute nouvelle fonctionnalitÃ©'`)
+2. Créez une branche feature (`git checkout -b feature/nouvelle-fonctionnalite`)
+3. Committez vos changes (`git commit -am 'Ajoute nouvelle fonctionnalité'`)
 4. Poussez vers la branche (`git push origin feature/nouvelle-fonctionnalite`)
-5. CrÃ©ez une Pull Request
+5. Créez une Pull Request
 
-## ğŸ“„ Licence
+## ?? Licence
 
-Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de dÃ©tails.
+Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
 
-## ğŸ‰ Amusez-vous bien !
+## ?? Amusez-vous bien !

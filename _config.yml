@@ -1,8 +1,8 @@
 # Configuration GitHub Pages pour Quiz Capitales
 title: Quiz des Capitales
 description: Jeu de quiz multi-joueurs sur les capitales du monde
-url: "" # L'URL sera automatiquement définie par GitHub Pages
-baseurl: "" # Sous-répertoire si applicable
+url: "https://chapte35.github.io"
+baseurl: "/ChapteQuizz"
 
 # Thème GitHub Pages (optionnel)
 # theme: minima
