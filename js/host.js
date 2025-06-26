@@ -116,6 +116,8 @@ async function startGame() {
     }
     
     try {
+        console.log('Démarrage de la partie par l\'hôte');
+        
         // Recharge les questions avec les nouveaux paramètres
         await currentGame.loadQuestions();
         
@@ -123,17 +125,27 @@ async function startGame() {
         currentGame.state = GameState.PLAYING;
         currentGame.questionIndex = 0;
         
-        // Affiche l'écran de jeu
+        // Affiche l'écran de jeu pour l'hôte
         document.getElementById('gameSetup').style.display = 'none';
         document.getElementById('gameScreen').style.display = 'block';
         
         // Met à jour l'affichage
         document.getElementById('totalQuestions').textContent = currentGame.questions.length;
         
-        // Lance la première question
-        showNextQuestion();
+        // Notifie TOUS les joueurs que le jeu commence
+        gameComm.emit('gameStarted', {
+            totalQuestions: currentGame.questions.length,
+            settings: currentGame.settings
+        });
         
-        Utils.showMessage('Partie démarrée !', 'success');
+        console.log('Notification envoyée aux joueurs:', currentGame.players.size, 'joueurs');
+        
+        // Lance la première question après un délai
+        setTimeout(() => {
+            showNextQuestion();
+        }, 2000);
+        
+        Utils.showMessage('Partie démarrée ! Questions envoyées aux joueurs.', 'success');
     } catch (error) {
         console.error('Erreur lors du démarrage:', error);
         Utils.showMessage('Erreur lors du démarrage de la partie', 'error');
@@ -150,11 +162,13 @@ function showNextQuestion() {
         return;
     }
     
-    // Met à jour l'affichage
+    console.log('Envoi de la question aux joueurs:', question.question);
+    
+    // Met à jour l'affichage pour l'hôte
     document.getElementById('currentQuestion').textContent = currentGame.questionIndex + 1;
     document.getElementById('questionText').textContent = question.question;
     
-    // Affiche les réponses
+    // Affiche les réponses pour l'hôte
     const answersGrid = document.getElementById('answersGrid');
     answersGrid.innerHTML = '';
     
@@ -167,13 +181,24 @@ function showNextQuestion() {
     });
     
     // Réinitialise l'affichage des réponses des joueurs
-    document.getElementById('playersAnswers').innerHTML = '';
+    document.getElementById('playersAnswers').innerHTML = '<h3>Réponses des joueurs</h3><p>En attente des réponses...</p>';
     document.getElementById('nextQuestionBtn').style.display = 'none';
     
-    // Démarre le timer
+    // ENVOIE la question à TOUS les joueurs connectés
+    const questionData = {
+        index: currentGame.questionIndex,
+        question: question.question,
+        answers: question.answers,
+        timeLimit: currentGame.settings.timePerQuestion
+    };
+    
+    gameComm.emit('newQuestion', questionData);
+    console.log('Question envoyée à', currentGame.players.size, 'joueurs');
+    
+    // Démarre le timer pour l'hôte
     startQuestionTimer();
     
-    // Simule les réponses des joueurs
+    // Simule les réponses des joueurs si en mode test
     simulatePlayerAnswers();
 }
 
@@ -210,7 +235,7 @@ function endQuestion() {
     
     currentGame.stopTimer();
     
-    // Affiche la bonne réponse
+    // Affiche la bonne réponse sur l'interface hôte
     const correctAnswer = currentGame.currentQuestion.correct;
     const answerOptions = document.querySelectorAll('.answer-option');
     
@@ -222,6 +247,15 @@ function endQuestion() {
     
     // Affiche les réponses des joueurs
     showPlayersAnswers();
+    
+    // Notifie les joueurs de la fin de question
+    const results = {
+        correctAnswer: correctAnswer,
+        leaderboard: currentGame.getLeaderboard()
+    };
+    
+    gameComm.emit('questionEnded', results);
+    console.log('Fin de question envoyée aux joueurs');
     
     // Affiche le bouton suivant
     document.getElementById('nextQuestionBtn').style.display = 'block';
@@ -270,11 +304,25 @@ function showPlayersAnswers() {
 function nextQuestion() {
     if (!currentGame) return;
     
-    currentGame.nextQuestion();
+    const nextQ = currentGame.nextQuestion();
     
-    if (currentGame.getCurrentQuestion()) {
-        showNextQuestion();
+    if (nextQ) {
+        // Il y a une question suivante
+        setTimeout(() => {
+            showNextQuestion();
+        }, 1000);
     } else {
+        // Fin du jeu - notifie tous les joueurs
+        console.log('Fin du jeu - envoi des résultats finaux');
+        const finalResults = {
+            leaderboard: currentGame.getLeaderboard(),
+            gameStats: {
+                totalQuestions: currentGame.questions.length,
+                playersCount: currentGame.players.size
+            }
+        };
+        
+        gameComm.emit('gameEnded', finalResults);
         showFinalResults();
     }
 }

@@ -35,67 +35,59 @@ function connectToGame() {
     try {
         console.log('Tentative de connexion avec code:', gameCode, 'nom:', playerName);
         
-        // Pour la version de test, on crée automatiquement une partie si elle n'existe pas
+        // Cherche d'abord une partie existante créée par un hôte
         let game = gameComm.getGame(gameCode);
         
         if (!game) {
-            console.log('Partie non trouvée, création d\'une partie de test');
-            // Crée une partie de test
-            game = gameComm.createGame(gameCode, 'host-test');
-            
-            // Charge les questions pour la partie de test
-            loadQuestionsForGame(game);
+            // Aucune partie trouvée avec ce code
+            showError(`Aucune partie trouvée avec le code "${gameCode}". Vérifiez que l'hôte a bien créé la partie.`);
+            return;
         }
         
-        if (game) {
-            // Tente de rejoindre la partie
-            const player = game.addPlayer(playerId, playerName);
-            
-            if (player) {
-                currentGame = game;
-                setupPlayerEvents();
-                showWaitingScreen();
-                Utils.showMessage('Connexion réussie !', 'success');
-                
-                console.log('Connexion réussie, joueurs dans la partie:', game.players.size);
-            } else {
-                showError('Impossible de rejoindre la partie.');
-            }
-        } else {
-            showError('Partie introuvable. Vérifiez le code.');
+        // Vérifie que la partie accepte encore des joueurs
+        if (game.state !== GameState.WAITING) {
+            showError('Cette partie a déjà commencé ou est terminée.');
+            return;
         }
+        
+        // Tente de rejoindre la partie existante
+        const player = gameComm.joinGame(gameCode, playerId, playerName);
+        
+        if (player) {
+            currentGame = game;
+            setupPlayerEvents();
+            showWaitingScreen();
+            Utils.showMessage('Connexion réussie ! En attente du début de la partie...', 'success');
+            
+            console.log('Connexion réussie, joueurs dans la partie:', game.players.size);
+            
+            // Notifie les autres joueurs qu'un nouveau joueur a rejoint
+            gameComm.emit('playerJoined', { playerId, playerName });
+        } else {
+            showError('Impossible de rejoindre la partie. Elle pourrait être pleine ou fermée.');
+        }
+        
     } catch (error) {
         console.error('Erreur de connexion:', error);
         showError('Erreur de connexion: ' + error.message);
     }
 }
 
-// Charge les questions pour une partie
-async function loadQuestionsForGame(game) {
-    try {
-        const questionsLoaded = await game.loadQuestions();
-        if (questionsLoaded) {
-            console.log('Questions chargées:', game.questions.length);
-        } else {
-            console.error('Erreur lors du chargement des questions');
-        }
-    } catch (error) {
-        console.error('Erreur chargement questions:', error);
-    }
-}
+// NE charge PAS les questions - seul l'hôte le fait
+// Cette fonction est supprimée car les joueurs ne créent pas de partie
 
 // Configure les événements du joueur
 function setupPlayerEvents() {
     console.log('Configuration des événements joueur');
     
-    // Écoute les événements du jeu
+    // Écoute les événements du jeu envoyés par l'hôte
     gameComm.on('gameStarted', () => {
-        console.log('Événement: jeu démarré');
+        console.log('Événement: jeu démarré par l\'hôte');
         showGameScreen();
     });
     
     gameComm.on('newQuestion', (questionData) => {
-        console.log('Événement: nouvelle question', questionData);
+        console.log('Événement: nouvelle question envoyée par l\'hôte', questionData);
         showQuestion(questionData);
     });
     
@@ -109,13 +101,18 @@ function setupPlayerEvents() {
         showFinalResults(finalResults);
     });
     
-    // Démarre automatiquement le jeu après 5 secondes pour les tests
-    setTimeout(() => {
-        if (currentGame && currentGame.state === GameState.WAITING) {
-            console.log('Démarrage automatique du jeu de test');
-            simulateGameFlow();
-        }
-    }, 5000);
+    gameComm.on('playerJoined', (data) => {
+        console.log('Nouveau joueur rejoint:', data.playerName);
+        updatePlayerCount();
+    });
+    
+    gameComm.on('playerLeft', (data) => {
+        console.log('Joueur parti:', data.playerName);
+        updatePlayerCount();
+    });
+    
+    // PAS de démarrage automatique - on attend que l'hôte démarre
+    console.log('En attente que l\'hôte démarre la partie...');
 }
 
 // Affiche l'écran d'attente
@@ -497,44 +494,19 @@ function goHome() {
     Utils.goHome();
 }
 
-// Simulation du flux de jeu pour les tests
+// Simulation du flux de jeu pour les tests - SUPPRIMÉE
+// Les joueurs n'initient pas le jeu, ils attendent l'hôte
+
+// Cette fonction est gardée pour compatibilité mais ne fait rien
 function simulateGameFlow() {
-    console.log('Démarrage simulation du jeu');
-    
-    // Simule le démarrage du jeu
-    setTimeout(() => {
-        if (currentGame) {
-            currentGame.state = GameState.PLAYING;
-            showGameScreen();
-            
-            // Démarre les questions après un court délai
-            setTimeout(() => {
-                simulateQuestions();
-            }, 1000);
-        }
-    }, 3000);
+    console.log('Les joueurs ne démarrent pas le jeu - en attente de l\'hôte');
+    // Ne fait rien - seul l'hôte peut démarrer
 }
 
-// Simule les questions pour les tests
+// Cette fonction est gardée pour compatibilité mais ne fait rien  
 function simulateQuestions() {
-    if (!currentGame || !currentGame.questions.length) {
-        console.error('Pas de jeu ou de questions disponibles');
-        return;
-    }
-    
-    console.log('Début des questions simulées');
-    
-    // Démarre la première question
-    currentGame.questionIndex = 0;
-    const firstQuestion = currentGame.questions[0];
-    currentGame.currentQuestion = firstQuestion;
-    
-    showQuestion({
-        index: 0,
-        question: firstQuestion.question,
-        answers: firstQuestion.answers,
-        timeLimit: currentGame.settings.timePerQuestion
-    });
+    console.log('Les joueurs ne génèrent pas de questions - en attente de l\'hôte');
+    // Ne fait rien - seul l'hôte envoie les questions
 }
 
 // Gestion de la déconnexion

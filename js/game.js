@@ -270,9 +270,19 @@ class SimpleGameCommunication {
     }
 
     emit(event, data) {
+        console.log('Émission événement:', event, 'avec data:', data);
         const handlers = this.eventHandlers.get(event);
         if (handlers) {
-            handlers.forEach(handler => handler(data));
+            console.log('Nombre de handlers pour', event, ':', handlers.length);
+            handlers.forEach(handler => {
+                try {
+                    handler(data);
+                } catch (error) {
+                    console.error('Erreur dans handler', event, ':', error);
+                }
+            });
+        } else {
+            console.log('Aucun handler pour l\'événement:', event);
         }
     }
 }
