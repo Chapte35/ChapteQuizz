@@ -33,45 +33,86 @@ function initializePlayer() {
 // Se connecte à la partie
 function connectToGame() {
     try {
-        // Tente de rejoindre la partie
-        const player = gameComm.joinGame(gameCode, playerId, playerName);
+        console.log('Tentative de connexion avec code:', gameCode, 'nom:', playerName);
         
-        if (player) {
-            currentGame = gameComm.getGame(gameCode);
-            setupPlayerEvents();
-            showWaitingScreen();
-            Utils.showMessage('Connexion réussie !', 'success');
+        // Pour la version de test, on crée automatiquement une partie si elle n'existe pas
+        let game = gameComm.getGame(gameCode);
+        
+        if (!game) {
+            console.log('Partie non trouvée, création d\'une partie de test');
+            // Crée une partie de test
+            game = gameComm.createGame(gameCode, 'host-test');
+            
+            // Charge les questions pour la partie de test
+            loadQuestionsForGame(game);
+        }
+        
+        if (game) {
+            // Tente de rejoindre la partie
+            const player = game.addPlayer(playerId, playerName);
+            
+            if (player) {
+                currentGame = game;
+                setupPlayerEvents();
+                showWaitingScreen();
+                Utils.showMessage('Connexion réussie !', 'success');
+                
+                console.log('Connexion réussie, joueurs dans la partie:', game.players.size);
+            } else {
+                showError('Impossible de rejoindre la partie.');
+            }
         } else {
-            showError('Impossible de rejoindre la partie. Vérifiez le code.');
+            showError('Partie introuvable. Vérifiez le code.');
         }
     } catch (error) {
         console.error('Erreur de connexion:', error);
-        showError('Erreur de connexion');
+        showError('Erreur de connexion: ' + error.message);
+    }
+}
+
+// Charge les questions pour une partie
+async function loadQuestionsForGame(game) {
+    try {
+        const questionsLoaded = await game.loadQuestions();
+        if (questionsLoaded) {
+            console.log('Questions chargées:', game.questions.length);
+        } else {
+            console.error('Erreur lors du chargement des questions');
+        }
+    } catch (error) {
+        console.error('Erreur chargement questions:', error);
     }
 }
 
 // Configure les événements du joueur
 function setupPlayerEvents() {
+    console.log('Configuration des événements joueur');
+    
     // Écoute les événements du jeu
     gameComm.on('gameStarted', () => {
+        console.log('Événement: jeu démarré');
         showGameScreen();
     });
     
     gameComm.on('newQuestion', (questionData) => {
+        console.log('Événement: nouvelle question', questionData);
         showQuestion(questionData);
     });
     
     gameComm.on('questionEnded', (results) => {
+        console.log('Événement: question terminée', results);
         showQuestionResults(results);
     });
     
     gameComm.on('gameEnded', (finalResults) => {
+        console.log('Événement: jeu terminé', finalResults);
         showFinalResults(finalResults);
     });
     
-    // Simulation d'événements pour les tests
+    // Démarre automatiquement le jeu après 5 secondes pour les tests
     setTimeout(() => {
         if (currentGame && currentGame.state === GameState.WAITING) {
+            console.log('Démarrage automatique du jeu de test');
             simulateGameFlow();
         }
     }, 5000);

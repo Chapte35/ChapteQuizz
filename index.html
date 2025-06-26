@@ -9,21 +9,21 @@
 <body>
     <div class="container">
         <div class="welcome-screen">
-            <h1>ğŸŒ Quiz des Capitales</h1>
-            <p>Testez vos connaissances gÃ©ographiques entre amis !</p>
+            <h1>?? Quiz des Capitales</h1>
+            <p>Testez vos connaissances géographiques entre amis !</p>
             
             <div class="role-selection">
                 <div class="role-card host-card" onclick="selectRole('host')">
-                    <div class="role-icon">ğŸ–¥ï¸</div>
-                    <h3>HÃ´te de la partie</h3>
-                    <p>CrÃ©ez une partie depuis votre PC</p>
-                    <button class="btn btn-primary">CrÃ©er une partie</button>
+                    <div class="role-icon">???</div>
+                    <h3>Hôte de la partie</h3>
+                    <p>Créez une partie depuis votre PC</p>
+                    <button class="btn btn-primary">Créer une partie</button>
                 </div>
                 
                 <div class="role-card player-card" onclick="selectRole('player')">
-                    <div class="role-icon">ğŸ“±</div>
+                    <div class="role-icon">??</div>
                     <h3>Rejoindre en tant que joueur</h3>
-                    <p>Utilisez votre tÃ©lÃ©phone pour participer</p>
+                    <p>Utilisez votre téléphone pour participer</p>
                     <button class="btn btn-secondary">Rejoindre</button>
                 </div>
             </div>
@@ -63,8 +63,23 @@
                 return;
             }
             
+            // Validation basique
+            if (name.length < 2) {
+                alert('Le nom doit contenir au moins 2 caractères');
+                return;
+            }
+            
+            if (code.length < 3) {
+                alert('Le code doit contenir au moins 3 caractères');
+                return;
+            }
+            
+            console.log('Tentative de connexion avec:', { code, name });
+            
             localStorage.setItem('playerName', name);
             localStorage.setItem('gameCode', code);
+            
+            // Redirection vers la page joueur
             window.location.href = 'player.html';
         }
         

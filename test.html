@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Test - Mode Simple</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="test-mode">
+            <h1>🧪 Mode Test Simplifié</h1>
+            <p>Version de test sans système hôte/joueur</p>
+            
+            <div class="test-controls">
+                <button class="btn btn-primary" onclick="startTestQuiz()">Commencer le Quiz</button>
+                <button class="btn btn-secondary" onclick="goHome()">Retour</button>
+            </div>
+        </div>
+        
+        <!-- Écran de jeu -->
+        <div class="game-screen" id="gameScreen" style="display: none;">
+            <div class="game-header">
+                <div class="question-info">
+                    <span class="question-number">Q<span id="questionNumber">1</span></span>
+                    <span class="player-score">Score: <span id="playerScore">0</span></span>
+                </div>
+                <div class="timer-mobile">
+                    <div class="timer-bar">
+                        <div class="timer-fill" id="timerFill"></div>
+                    </div>
+                    <span id="timeRemaining">15s</span>
+                </div>
+            </div>
+            
+            <div class="question-text">
+                <h2 id="questionDisplay">Question en cours de chargement...</h2>
+            </div>
+            
+            <div class="answers-mobile" id="answersMobile">
+                <button class="answer-btn" data-answer="A" onclick="selectTestAnswer('A')">
+                    <span class="answer-letter">A</span>
+                    <span class="answer-text">Réponse A</span>
+                </button>
+                <button class="answer-btn" data-answer="B" onclick="selectTestAnswer('B')">
+                    <span class="answer-letter">B</span>
+                    <span class="answer-text">Réponse B</span>
+                </button>
+                <button class="answer-btn" data-answer="C" onclick="selectTestAnswer('C')">
+                    <span class="answer-letter">C</span>
+                    <span class="answer-text">Réponse C</span>
+                </button>
+                <button class="answer-btn" data-answer="D" onclick="selectTestAnswer('D')">
+                    <span class="answer-letter">D</span>
+                    <span class="answer-text">Réponse D</span>
+                </button>
+            </div>
+            
+            <div class="answer-feedback" id="answerFeedback" style="display: none;">
+                <div class="feedback-message" id="feedbackMessage"></div>
+            </div>
+        </div>
+        
+        <!-- Écran des résultats -->
+        <div class="results-screen" id="resultsScreen" style="display: none;">
+            <h1>🏆 Quiz terminé !</h1>
+            <div class="result-card">
+                <div class="result-score">
+                    <span class="score-value" id="finalScore">0</span>
+                    <span class="score-label">points</span>
+                </div>
+                <div class="result-stats">
+                    <p>Bonnes réponses : <strong id="correctAnswers">0</strong>/<strong id="totalQuestions">0</strong></p>
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="startTestQuiz()">Rejouer</button>
+            <button class="btn btn-secondary" onclick="goHome()">Accueil</button>
+        </div>
+    </div>
+
+    <script>
+        let testQuestions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let correctCount = 0;
+        let selectedAnswer = null;
+        let timer = null;
+
+        // Charge les questions depuis le fichier JSON
+        async function loadTestQuestions() {
+            try {
+                const response = await fetch('data/questions.json');
+                const data = await response.json();
+                testQuestions = data.questions.sort(() => 0.5 - Math.random()).slice(0, 10);
+                return true;
+            } catch (error) {
+                console.error('Erreur chargement questions:', error);
+                alert('Erreur lors du chargement des questions');
+                return false;
+            }
+        }
+
+        // Démarre le quiz de test
+        async function startTestQuiz() {
+            const loaded = await loadTestQuestions();
+            if (!loaded) return;
+
+            currentQuestionIndex = 0;
+            score = 0;
+            correctCount = 0;
+            
+            document.querySelector('.test-mode').style.display = 'none';
+            document.getElementById('resultsScreen').style.display = 'none';
+            document.getElementById('gameScreen').style.display = 'block';
+            
+            showNextQuestion();
+        }
+
+        // Affiche la question suivante
+        function showNextQuestion() {
+            if (currentQuestionIndex >= testQuestions.length) {
+                showTestResults();
+                return;
+            }
+
+            const question = testQuestions[currentQuestionIndex];
+            selectedAnswer = null;
+
+            // Met à jour l'affichage
+            document.getElementById('questionNumber').textContent = currentQuestionIndex + 1;
+            document.getElementById('questionDisplay').textContent = question.question;
+            document.getElementById('playerScore').textContent = score;
+
+            // Affiche les réponses
+            const answerButtons = document.querySelectorAll('.answer-btn');
+            const answers = Object.entries(question.answers);
+            
+            answerButtons.forEach((btn, index) => {
+                if (index < answers.length) {
+                    const [letter, text] = answers[index];
+                    btn.dataset.answer = letter;
+                    btn.querySelector('.answer-letter').textContent = letter;
+                    btn.querySelector('.answer-text').textContent = text;
+                    btn.disabled = false;
+                    btn.className = 'answer-btn';
+                }
+            });
+
+            // Cache le feedback
+            document.getElementById('answerFeedback').style.display = 'none';
+
+            // Démarre le timer
+            startTestTimer(15);
+        }
+
+        // Démarre le timer
+        function startTestTimer(duration) {
+            const timerFill = document.getElementById('timerFill');
+            const timeDisplay = document.getElementById('timeRemaining');
+            
+            let timeLeft = duration;
+            timerFill.style.width = '100%';
+            timerFill.style.background = '#4CAF50';
+
+            if (timer) clearInterval(timer);
+
+            timer = setInterval(() => {
+                timeLeft--;
+                timeDisplay.textContent = `${timeLeft}s`;
+                
+                const percentage = Math.max(0, (timeLeft / duration) * 100);
+                timerFill.style.width = `${percentage}%`;
+                
+                if (timeLeft <= 5) {
+                    timerFill.style.background = '#f44336';
+                } else if (timeLeft <= 10) {
+                    timerFill.style.background = '#FF9800';
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    if (!selectedAnswer) {
+                        showTimeUpFeedback();
+                    }
+                    setTimeout(nextQuestion, 2000);
+                }
+            }, 1000);
+        }
+
+        // Sélectionne une réponse
+        function selectTestAnswer(answer) {
+            if (selectedAnswer) return;
+            
+            selectedAnswer = answer;
+            clearInterval(timer);
+
+            const answerButtons = document.querySelectorAll('.answer-btn');
+            answerButtons.forEach(btn => {
+                btn.disabled = true;
+                if (btn.dataset.answer === answer) {
+                    btn.classList.add('selected');
+                }
+            });
+
+            const question = testQuestions[currentQuestionIndex];
+            const isCorrect = answer === question.correct;
+            
+            if (isCorrect) {
+                score += 100;
+                correctCount++;
+                showFeedback('✅ Bonne réponse ! +100 points', '#4CAF50');
+            } else {
+                showFeedback(`❌ Mauvaise réponse. La bonne réponse était ${question.correct}`, '#f44336');
+            }
+
+            setTimeout(nextQuestion, 2000);
+        }
+
+        // Affiche le feedback
+        function showFeedback(message, color) {
+            const feedback = document.getElementById('answerFeedback');
+            const messageEl = document.getElementById('feedbackMessage');
+            
+            messageEl.innerHTML = message;
+            feedback.style.background = color;
+            feedback.style.color = 'white';
+            feedback.style.padding = '15px';
+            feedback.style.borderRadius = '8px';
+            feedback.style.textAlign = 'center';
+            feedback.style.marginTop = '20px';
+            feedback.style.display = 'block';
+        }
+
+        // Affiche feedback temps écoulé
+        function showTimeUpFeedback() {
+            const question = testQuestions[currentQuestionIndex];
+            showFeedback(`⏰ Temps écoulé ! La bonne réponse était ${question.correct}`, '#FF9800');
+        }
+
+        // Passe à la question suivante
+        function nextQuestion() {
+            currentQuestionIndex++;
+            showNextQuestion();
+        }
+
+        // Affiche les résultats
+        function showTestResults() {
+            document.getElementById('gameScreen').style.display = 'none';
+            document.getElementById('resultsScreen').style.display = 'block';
+            
+            document.getElementById('finalScore').textContent = score;
+            document.getElementById('correctAnswers').textContent = correctCount;
+            document.getElementById('totalQuestions').textContent = testQuestions.length;
+        }
+
+        // Retour à l'accueil
+        function goHome() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

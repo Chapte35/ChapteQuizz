@@ -229,11 +229,22 @@ class SimpleGameCommunication {
 
     // Rejoint une partie
     joinGame(gameCode, playerId, playerName) {
+        console.log('Tentative de rejoindre la partie:', gameCode);
         const game = this.games.get(gameCode);
-        if (game && game.state === GameState.WAITING) {
-            return game.addPlayer(playerId, playerName);
+        
+        if (game) {
+            if (game.state === GameState.WAITING || game.state === GameState.PLAYING) {
+                const player = game.addPlayer(playerId, playerName);
+                console.log('Joueur ajouté:', playerName, 'Total joueurs:', game.players.size);
+                return player;
+            } else {
+                console.log('Partie dans un état non valide:', game.state);
+                return null;
+            }
+        } else {
+            console.log('Partie non trouvée pour le code:', gameCode);
+            return null;
         }
-        return null;
     }
 
     // Obtient une partie
